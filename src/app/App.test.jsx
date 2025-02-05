@@ -6,5 +6,5 @@ import App from '.'
 
 test('renders without crashing', () => {
   render(<Suspense fallback="loading"><App /></Suspense>)
-  expect(screen.getByText('flash.comma.ai')).toBeInTheDocument()
+  expect(screen.getByText('flash.konik.ai')).toBeInTheDocument()
 })
