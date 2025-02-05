@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 
-import comma from '../assets/comma.svg'
+import konik from '../assets/konik.svg'
 import qdlPorts from '../assets/qdl-ports.svg'
 import zadigCreateNewDevice from '../assets/zadig_create_new_device.png'
 import zadigForm from '../assets/zadig_form.png'
@@ -27,16 +27,16 @@ function CopyText({ children: text }) {
 
 export default function App() {
   const version = import.meta.env.VITE_PUBLIC_GIT_SHA || 'dev'
-  console.info(`flash.comma.ai version: ${version}`)
+  console.info(`flash.konik.ai version: ${version}`)
   return (
     <div className="flex flex-col lg:flex-row flex-wrap">
       <main className="p-12 md:p-16 lg:p-20 xl:p-24 w-screen max-w-none lg:max-w-prose lg:w-auto h-auto lg:h-screen lg:overflow-y-auto prose dark:prose-invert prose-green bg-white dark:bg-gray-900">
         <section>
-          <img src={comma} alt="comma" width={128} height={128} className="dark:invert" />
-          <h1>flash.comma.ai</h1>
+          <img src={konik} alt="konik" width={128} height={128} className="dark:invert" />
+          <h1>flash.konik.ai</h1>
           <p>
-            This tool allows you to flash AGNOS onto your comma device. AGNOS is the Ubuntu-based operating system for
-            your <a href="https://comma.ai/shop/comma-3x" target="_blank">comma 3/3X</a>.
+            This tool allows you to flash AGNOS onto your konik device. AGNOS is the Ubuntu-based operating system for
+            your <a href="https://konik.ai/shop/konik-a1/" target="_blank">Konik A1</a>.
           </p>
         </section>
         <hr />
@@ -151,14 +151,13 @@ export default function App() {
           </ul>
           <h3>Other questions</h3>
           <p>
-            If you need help, join our <a href="https://discord.comma.ai" target="_blank">Discord server</a> and go to
-            the <strong>#hw-three-3x</strong> channel.
+            If you need help, join our <a href="https://discord.gg/TdpNYCmJ" target="_blank">Discord server</a>
           </p>
         </section>
 
         <div className="hidden lg:block">
           <hr />
-          flash.comma.ai version: <code>{version}</code>
+          flash.konik.ai version: <code>{version}</code>
         </div>
       </main>
 
@@ -169,7 +168,7 @@ export default function App() {
       </div>
 
       <div className="w-screen max-w-none p-12 md:p-16 prose dark:prose-invert bg-white dark:bg-gray-900 lg:hidden">
-        flash.comma.ai version: <code>{version}</code>
+        flash.konik.ai version: <code>{version}</code>
       </div>
     </div>
   )
