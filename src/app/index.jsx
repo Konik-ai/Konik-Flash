@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react'
 
 import konik from '../assets/konik.svg'
-import qdlPorts from '../assets/qdl-ports.svg'
+import qdlPorts from '../assets/instructions.png'
 import zadigCreateNewDevice from '../assets/zadig_create_new_device.png'
 import zadigForm from '../assets/zadig_form.png'
 
