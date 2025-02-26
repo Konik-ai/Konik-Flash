@@ -149,7 +149,7 @@ export default function App() {
           </ul>
           <h3>Other questions</h3>
           <p>
-            If you need help, join our <a href="https://discord.gg/TdpNYCmJ" target="_blank">Discord server</a>
+            If you need help, join our <a href="https://discord.gg/xYTdA63y92" target="_blank">Discord server</a>
           </p>
         </section>
 
