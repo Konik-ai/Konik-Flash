@@ -27,7 +27,7 @@ export class ImageManager {
     const estimate = await navigator.storage.estimate()
     const quotaMB = (estimate.quota || 0) / (1024 ** 2)
     if (quotaMB < MIN_QUOTA_MB) {
-      throw new Error(`Not enough storage: ${quotaMB.toFixed(0)}MB free, need ${MIN_QUOTA_MB.toFixed(0)}MB`)
+      console.warn(`Not enough storage: ${quotaMB.toFixed(0)}MB free, need ${MIN_QUOTA_MB.toFixed(0)}MB`)
     }
   }
 
