@@ -67,6 +67,10 @@ export function checkCompatibleDevice(storageInfo) {
     storageInfo.total_blocks === 14143488) {
     return 'userdata_30'
   }
+  if (storageInfo.prod_name === 'HN8G962EHKX037' && storageInfo.manufacturer_id === 429 &&
+    storageInfo.total_blocks === 14125056) {
+    return 'userdata_30'
+  }
 
   throw new Error('Could not identify UFS chip')
 }
