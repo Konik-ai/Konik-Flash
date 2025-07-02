@@ -1,4 +1,24 @@
 const config = {
+  versions: [
+    {
+      id: 'agnos-12.4',
+      name: 'AGNOS 12.4 (openpilot 0.9.9)',
+      manifest: 'https://storage.konik.ai/agnosupdate/12.4/all-partitions.json',
+      isLatest: true,
+    },
+    {
+      id: 'agnos-11.13',
+      name: 'AGNOS 11.13 (openpilot 0.9.8)',
+      manifest: 'https://storage.konik.ai/agnosupdate/11.13/all-partitions.json',
+      isLatest: false,
+    },
+    {
+      id: 'agnos-10.1',
+      name: 'AGNOS 10.1 (openpilot 0.9.7)',
+      manifest: 'https://storage.konik.ai/agnosupdate/10.1/all-partitions.json',
+      isLatest: false,
+    },
+  ],
   manifests: {
     release: 'https://storage.konik.ai/agnosupdate/11.13/all-partitions.json',
     master: 'https://raw.githubusercontent.com/commaai/openpilot/master/system/hardware/tici/all-partitions.json',
