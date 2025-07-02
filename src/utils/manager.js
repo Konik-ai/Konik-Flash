@@ -344,11 +344,11 @@ export class FlashManager {
       .filter((image) => !image.gpt && image.name !== 'persist')
       .filter((image) => !image.name.startsWith('userdata_') || image.name === this.#userdataImage)
 
-    if (!systemImages.find((image) => image.name === this.#userdataImage)) {
-      console.error(`[Flash] Did not find userdata image "${this.#userdataImage}"`)
-      this.#setError(ErrorCode.UNKNOWN)
-      return
-    }
+    // if (!systemImages.find((image) => image.name === this.#userdataImage)) {
+    //   console.error(`[Flash] Did not find userdata image "${this.#userdataImage}"`)
+    //   this.#setError(ErrorCode.UNKNOWN)
+    //   return
+    // }
 
     try {
       for await (const image of systemImages) {
