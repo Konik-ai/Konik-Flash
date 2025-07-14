@@ -71,6 +71,10 @@ export function checkCompatibleDevice(storageInfo) {
     storageInfo.total_blocks === 14125056) {
     return 'userdata_30'
   }
+  if (storageInfo.prod_name === 'KLUCG2K1EA-B0C1' && storageInfo.manufacturer_id === 462 &&
+    storageInfo.total_blocks === 14145536) {
+    return 'userdata_30'
+  }
 
   throw new Error('Could not identify UFS chip')
 }
