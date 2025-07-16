@@ -178,6 +178,9 @@ export default function Flash() {
   const [error, setError] = useState(ErrorCode.NONE)
   const [connected, setConnected] = useState(false)
   const [serial, setSerial] = useState(null)
+  const [selectedVersion, setSelectedVersion] = useState(() => {
+    return config.versions.find(v => v.isLatest) || config.versions[0]
+  })
 
   const qdlManager = useRef(null)
   const imageManager = useImageManager()
@@ -189,7 +192,7 @@ export default function Flash() {
       .then((res) => res.arrayBuffer())
       .then((programmer) => {
         // Create QDL manager with callbacks that update React state
-        qdlManager.current = new FlashManager(config.manifests.release, programmer, {
+        qdlManager.current = new FlashManager(selectedVersion.manifest, programmer, {
           onStepChange: setStep,
           onMessageChange: setMessage,
           onProgressChange: setProgress,
@@ -205,7 +208,7 @@ export default function Flash() {
         console.error('Error initializing Flash manager:', err)
         setError(ErrorCode.UNKNOWN)
       })
-  }, [config, imageManager.current])
+  }, [selectedVersion.manifest, imageManager.current])
 
   // Handle user clicking the start button
   const handleStart = () => qdlManager.current?.start()
@@ -239,8 +242,38 @@ export default function Flash() {
     window.removeEventListener("beforeunload", beforeUnloadListener, { capture: true })
   }
 
+  // Handle version change
+  const handleVersionChange = (event) => {
+    const newVersion = config.versions.find(v => v.id === event.target.value)
+    if (newVersion && step === StepCode.READY) {
+      setSelectedVersion(newVersion)
+    }
+  }
+
+  const canChangeVersion = step === StepCode.READY || step === StepCode.INITIALIZING
+
   return (
     <div id="flash" className="relative flex flex-col gap-8 justify-center items-center h-full">
+      {canChangeVersion && (
+        <div className="flex flex-col items-center gap-2">
+          <label htmlFor="version-select" className="text-sm dark:text-gray-300 font-medium">
+            AGNOS Version
+          </label>
+          <select
+            id="version-select"
+            value={selectedVersion.id}
+            onChange={handleVersionChange}
+            disabled={step === StepCode.INITIALIZING}
+            className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {config.versions.map((version) => (
+              <option key={version.id} value={version.id}>
+                {version.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <div
         className={`p-8 rounded-full ${bgColor}`}
         style={{ cursor: canStart ? 'pointer' : 'default' }}
