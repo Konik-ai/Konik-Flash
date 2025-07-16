@@ -12,12 +12,13 @@ const config = {
       manifest: 'https://storage.konik.ai/agnosupdate/11.13/all-partitions.json',
       isLatest: false,
     },
-    {
-      id: 'agnos-10.1',
-      name: 'AGNOS 10.1',
-      manifest: 'https://storage.konik.ai/agnosupdate/10.1/all-partitions.json',
-      isLatest: false,
-    },
+    // WIP
+    // {
+    //   id: 'agnos-10.1',
+    //   name: 'AGNOS 10.1',
+    //   manifest: 'https://storage.konik.ai/agnosupdate/10.1/all-partitions.json',
+    //   isLatest: false,
+    // },
   ],
   manifests: {
     release: 'https://storage.konik.ai/agnosupdate/11.13/all-partitions.json',
