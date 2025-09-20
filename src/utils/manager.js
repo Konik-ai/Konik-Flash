@@ -39,41 +39,19 @@ export function checkCompatibleDevice(storageInfo) {
     throw new Error('UFS chip parameters mismatch')
   }
 
-  // comma three
-  // userdata start 6159400 size 7986131
-  if (storageInfo.prod_name === 'H28S7Q302BMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'H28U74301AMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
+  // Check total_blocks to determine device type regardless of name/manufacturer
+  // 64GB devices (comma three and similar SOMs) - approximately 14M blocks
+  if (storageInfo.total_blocks <= 16777216) { // 16M block limit with buffer
     return 'userdata_30'
   }
 
-  // comma 3X
-  // userdata start 6159400 size 23446483
-  if (storageInfo.prod_name === 'SDINDDH4-128G   1308' && storageInfo.manufacturer_id === 325 &&
-    storageInfo.total_blocks === 29605888) {
+  // 128GB devices (comma 3X) - approximately 29M blocks
+  // Support both userdata_89 and userdata_90 variants based on exact total_blocks
+  if (storageInfo.total_blocks === 29605888) {
     return 'userdata_89'
   }
-  // unknown userdata sectors
-  if (storageInfo.prod_name === 'SDINDDH4-128G   1272' && storageInfo.manufacturer_id === 325 &&
-    storageInfo.total_blocks === 29775872) {
+  if (storageInfo.total_blocks === 29775872) {
     return 'userdata_90'
-  }
-
-  // Konik A1 - 8x64GB
-  if (storageInfo.prod_name === '64GB-UFS-MT     8QSP' && storageInfo.manufacturer_id === 300 &&
-    storageInfo.total_blocks === 14143488) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'HN8G962EHKX037' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14125056) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'KLUCG2K1EA-B0C1' && storageInfo.manufacturer_id === 462 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
   }
 
   throw new Error('Could not identify UFS chip')
