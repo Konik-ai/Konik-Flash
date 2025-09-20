@@ -39,18 +39,7 @@ export function checkCompatibleDevice(storageInfo) {
     throw new Error('UFS chip parameters mismatch')
   }
 
-  // comma three
-  // userdata start 6159400 size 7986131
-  if (storageInfo.prod_name === 'H28S7Q302BMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'H28U74301AMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
-  }
-
-  // comma 3X
+  // comma 3X - keep exact total_blocks intact
   // userdata start 6159400 size 23446483
   if (storageInfo.prod_name === 'SDINDDH4-128G   1308' && storageInfo.manufacturer_id === 325 &&
     storageInfo.total_blocks === 29605888) {
@@ -62,18 +51,28 @@ export function checkCompatibleDevice(storageInfo) {
     return 'userdata_90'
   }
 
-  // Konik A1 - 8x64GB
-  if (storageInfo.prod_name === '64GB-UFS-MT     8QSP' && storageInfo.manufacturer_id === 300 &&
-    storageInfo.total_blocks === 14143488) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'HN8G962EHKX037' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14125056) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'KLUCG2K1EA-B0C1' && storageInfo.manufacturer_id === 462 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
+  // comma three - check that total_blocks is under max value for 64GB with buffer
+  // 64GB = ~67 billion bytes / 4096 bytes per block = ~16.4M blocks
+  // Add buffer for variation: max 16M blocks
+  const MAX_64GB_BLOCKS = 16 * 1024 * 1024; // 16M blocks with buffer
+  
+  if (storageInfo.total_blocks <= MAX_64GB_BLOCKS) {
+    // Known comma three devices
+    if (storageInfo.prod_name === 'H28S7Q302BMR' && storageInfo.manufacturer_id === 429) {
+      return 'userdata_30'
+    }
+    if (storageInfo.prod_name === 'H28U74301AMR' && storageInfo.manufacturer_id === 429) {
+      return 'userdata_30'
+    }
+    if (storageInfo.prod_name === '64GB-UFS-MT     8QSP' && storageInfo.manufacturer_id === 300) {
+      return 'userdata_30'
+    }
+    if (storageInfo.prod_name === 'HN8G962EHKX037' && storageInfo.manufacturer_id === 429) {
+      return 'userdata_30'
+    }
+    if (storageInfo.prod_name === 'KLUCG2K1EA-B0C1' && storageInfo.manufacturer_id === 462) {
+      return 'userdata_30'
+    }
   }
 
   throw new Error('Could not identify UFS chip')
