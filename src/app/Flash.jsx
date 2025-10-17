@@ -181,6 +181,14 @@ export default function Flash() {
   const [selectedVersion, setSelectedVersion] = useState(() => {
     return config.versions.find(v => v.isLatest) || config.versions[0]
   })
+  const [showOptions, setShowOptions] = useState(() => {
+    const saved = localStorage.getItem('flash.showOptions')
+    return saved ? JSON.parse(saved) : false
+  })
+  const [flashUserdata, setFlashUserdata] = useState(() => {
+    const saved = localStorage.getItem('flash.flashUserdata')
+    return saved ? JSON.parse(saved) : true
+  })
 
   const qdlManager = useRef(null)
   const imageManager = useImageManager()
@@ -199,6 +207,8 @@ export default function Flash() {
           onErrorChange: setError,
           onConnectionChange: setConnected,
           onSerialChange: setSerial
+        }, {
+          flashUserdata: flashUserdata
         })
 
         // Initialize the manager
@@ -208,7 +218,7 @@ export default function Flash() {
         console.error('Error initializing Flash manager:', err)
         setError(ErrorCode.UNKNOWN)
       })
-  }, [selectedVersion.manifest, imageManager.current])
+  }, [selectedVersion.manifest, flashUserdata, imageManager.current])
 
   // Handle user clicking the start button
   const handleStart = () => qdlManager.current?.start()
@@ -252,6 +262,28 @@ export default function Flash() {
 
   const canChangeVersion = step === StepCode.READY || step === StepCode.INITIALIZING
 
+  // Handle keyboard shortcut to toggle options panel
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'k' || event.key === 'K') {
+        setShowOptions(prev => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [])
+
+  // Persist showOptions to localStorage
+  useEffect(() => {
+    localStorage.setItem('flash.showOptions', JSON.stringify(showOptions))
+  }, [showOptions])
+
+  // Persist flashUserdata to localStorage
+  useEffect(() => {
+    localStorage.setItem('flash.flashUserdata', JSON.stringify(flashUserdata))
+  }, [flashUserdata])
+
   return (
     <div id="flash" className="relative flex flex-col gap-8 justify-center items-center h-full">
       {canChangeVersion && (
@@ -287,11 +319,35 @@ export default function Flash() {
           className={`${iconStyle} ${!error && step !== StepCode.DONE ? 'animate-pulse' : ''}`}
         />
       </div>
+      <div className="relative w-full flex justify-center" style={{ height: showOptions ? '80px' : '0px', transition: 'height 0.2s ease-in-out' }}>
+        {showOptions && (
+          <div className="absolute top-2 flex flex-col items-start gap-3 p-4 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-lg">
+            <div className="text-sm dark:text-gray-300 font-medium mb-1">Options (press k to hide)</div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={flashUserdata}
+                onChange={(e) => setFlashUserdata(e.target.checked)}
+                disabled={step !== StepCode.READY && step !== StepCode.INITIALIZING}
+                className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+              <span className="text-sm dark:text-gray-100">
+                Flash userdata (disable to keep your data)
+              </span>
+            </label>
+          </div>
+        )}
+      </div>
       <div className="w-full max-w-3xl px-8 transition-opacity duration-300" style={{ opacity: progress === -1 ? 0 : 1 }}>
         <LinearProgress value={progress * 100} barColor={bgColor} />
       </div>
       <span className="text-3xl dark:text-white font-mono font-light">{title}</span>
       <span className="text-xl dark:text-white px-8 max-w-xl">{description}</span>
+      {!showOptions && !flashUserdata && (
+        <span className="text-sm dark:text-gray-400 text-gray-500 italic">
+          Press k for options
+        </span>
+      )}
       {error && (
         <button
           className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 transition-colors"

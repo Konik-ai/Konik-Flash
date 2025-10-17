@@ -74,16 +74,24 @@ export function checkCompatibleDevice(storageInfo) {
  * @property {ChangeCallback<string>} [onSerialChange]
  */
 
+/**
+ * @typedef {object} FlashManagerOptions
+ * @property {boolean} [flashUserdata=true]
+ */
+
 export class FlashManager {
   /** @type {string} */
   #userdataImage
+  /** @type {boolean} */
+  #flashUserdata
 
   /**
    * @param {string} manifestUrl
    * @param {ArrayBuffer} programmer
    * @param {FlashManagerCallbacks} callbacks
+   * @param {FlashManagerOptions} options
    */
-  constructor(manifestUrl, programmer, callbacks = {}) {
+  constructor(manifestUrl, programmer, callbacks = {}, options = {}) {
     this.manifestUrl = manifestUrl
     this.callbacks = callbacks
     this.device = new qdlDevice(programmer)
@@ -93,6 +101,7 @@ export class FlashManager {
     this.manifest = null
     this.step = StepCode.INITIALIZING
     this.error = ErrorCode.NONE
+    this.#flashUserdata = options.flashUserdata ?? true
   }
 
   /** @param {number} step */
@@ -299,12 +308,26 @@ export class FlashManager {
     }
     console.info(`[Flash] "persist" partition located in LUN ${persistLun}`)
 
+    // Check if userdata partition exists (only if we want to preserve it)
+    let userdataLun = -1
+    if (!this.#flashUserdata) {
+      const [userdataFound, foundLun] = await this.device.detectPartition('userdata')
+      if (userdataFound && luns.indexOf(foundLun) >= 0) {
+        userdataLun = foundLun
+        console.info(`[Flash] "userdata" partition located in LUN ${userdataLun}, will be preserved`)
+      } else {
+        console.warn('[Flash] "userdata" partition not found, cannot preserve it (will be created during flash)')
+      }
+    }
+
     try {
       // Erase each LUN, avoid erasing critical partitions and persist
       const critical = ['mbr', 'gpt']
       for (const lun of luns) {
         const preserve = [...critical]
         if (lun === persistLun) preserve.push('persist')
+        // Only preserve userdata if it was found
+        if (!this.#flashUserdata && lun === userdataLun) preserve.push('userdata')
         console.info(`[Flash] Erasing LUN ${lun} while preserving ${preserve.map((part) => `"${part}"`).join(', ')} partitions`)
         if (!await this.device.eraseLun(lun, preserve)) {
           throw new Error(`Erasing LUN ${lun} failed`)
@@ -324,7 +347,14 @@ export class FlashManager {
     // Exclude GPT images and persist image, and pick correct userdata image to flash
     const systemImages = this.manifest
       .filter((image) => !image.gpt && image.name !== 'persist')
-      .filter((image) => !image.name.startsWith('userdata_') || image.name === this.#userdataImage)
+      .filter((image) => {
+        // Skip all userdata images if flashUserdata is disabled
+        if (!this.#flashUserdata && image.name.startsWith('userdata_')) {
+          return false
+        }
+        // Otherwise, pick the correct userdata image for this device
+        return !image.name.startsWith('userdata_') || image.name === this.#userdataImage
+      })
 
     // if (!systemImages.find((image) => image.name === this.#userdataImage)) {
     //   console.error(`[Flash] Did not find userdata image "${this.#userdataImage}"`)
