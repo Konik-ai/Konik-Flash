@@ -1,12 +1,6 @@
 const config = {
   versions: [
     {
-      id: 'agnos-14.3',
-      name: 'AGNOS 14.3',
-      manifest: 'https://storage.konik.ai/agnosupdate/14.3/all-partitions.json',
-      isLatest: false,
-    },
-    {
       id: 'agnos-13.1',
       name: 'AGNOS 13.1',
       manifest: 'https://storage.konik.ai/agnosupdate/13.1/all-partitions.json',
