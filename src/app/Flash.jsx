@@ -473,6 +473,50 @@ function ConnectInstructions({ deviceType, onNext }) {
   )
 }
 
+// Version selection component
+function VersionSelect({ selectedVersion, onSelect, onNext }) {
+  return (
+    <div className="wizard-screen flex flex-col items-center justify-center h-full gap-6 p-8">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold mb-2">Choose AGNOS version</h2>
+        <p className="text-xl text-gray-600">Select the build you want to flash</p>
+      </div>
+
+      <div className="w-full max-w-xl space-y-3">
+        {config.versions.map((version) => (
+          <button
+            key={version.id}
+            onClick={() => onSelect(version)}
+            className={`w-full flex items-center justify-between px-5 py-4 rounded-xl border-2 transition-colors ${
+              selectedVersion?.id === version.id
+                ? 'border-slate-900 bg-slate-900/10'
+                : 'border-slate-300 hover:border-slate-400'
+            }`}
+          >
+            <span className="text-lg font-semibold">{version.name}</span>
+            {version.isLatest && (
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                Latest
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={onNext}
+        disabled={!selectedVersion}
+        className={`px-8 py-3 text-xl font-semibold rounded-full transition-colors ${
+          selectedVersion
+            ? 'bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white'
+            : 'bg-slate-200 text-slate-500 cursor-not-allowed'
+        }`}
+      >
+        Next
+      </button>
+    </div>
+  )
+}
 // Linux unbind component
 const DETACH_SCRIPT = 'for d in /sys/bus/usb/drivers/qcserial/*-*; do [ -e "$d" ] && echo -n "$(basename $d)" | sudo tee /sys/bus/usb/drivers/qcserial/unbind > /dev/null; done'
 
@@ -586,12 +630,14 @@ function getWizardSteps(selectedDevice) {
   if (isWindows) steps.push('Driver')
   steps.push('Connect')
   if (isLinux && selectedDevice === DeviceType.COMMA_3) steps.push('Unbind')
+  steps.push('Version')
   steps.push('Flash')
   return steps
 }
 
 // Map screen names to step names
 const screenToStep = {
+  version: 'Version',
   device: 'Device',
   zadig: 'Driver',
   connect: 'Connect',
@@ -609,7 +655,8 @@ export default function Flash() {
   const [connected, setConnected] = useState(false)
   const [serial, setSerial] = useState(null)
   const [selectedDevice, setSelectedDevice] = useState(null)
-  const [wizardScreen, setWizardScreen] = useState('landing') // 'landing', 'device', 'zadig', 'connect', 'unbind', 'webusb', 'flash'
+  const [selectedVersion, setSelectedVersion] = useState(() => config.versions.find((version) => version.isLatest) || config.versions[0])
+  const [wizardScreen, setWizardScreen] = useState('landing') // 'landing', 'device', 'zadig', 'connect', 'unbind', 'version', 'webusb', 'flash'
 
   const qdlManager = useRef(null)
   const imageManager = useImageManager()
@@ -619,13 +666,13 @@ export default function Flash() {
   const wizardStep = screenToStep[wizardScreen] ? wizardSteps.indexOf(screenToStep[wizardScreen]) : -1
 
   useEffect(() => {
-    if (!imageManager.current) return
+    if (!imageManager.current || !selectedVersion) return
 
     fetch(config.loader.url)
       .then((res) => res.arrayBuffer())
       .then((programmer) => {
         // Create QDL manager with callbacks that update React state
-        qdlManager.current = new FlashManager(programmer, {
+        qdlManager.current = new FlashManager(selectedVersion.manifest, programmer, {
           onStepChange: setStep,
           onMessageChange: setMessage,
           onProgressChange: setProgress,
@@ -641,7 +688,7 @@ export default function Flash() {
         console.error('Error initializing Flash manager:', err)
         setError(ErrorCode.UNKNOWN)
       })
-  }, [config, imageManager.current])
+  }, [selectedVersion?.manifest, imageManager.current])
 
   // Transition to flash screen when connected
   useEffect(() => {
@@ -677,12 +724,17 @@ export default function Flash() {
     if (isLinux && selectedDevice === DeviceType.COMMA_3) {
       setWizardScreen('unbind')
     } else {
-      setWizardScreen('webusb')
+      setWizardScreen('version')
     }
   }
 
   // Handle linux unbind done
   const handleUnbindDone = () => {
+    setWizardScreen('version')
+  }
+
+  // Handle version selection next
+  const handleVersionNext = () => {
     setWizardScreen('webusb')
   }
 
@@ -704,6 +756,8 @@ export default function Flash() {
       setWizardScreen('connect')
     } else if (stepName === 'Unbind') {
       setWizardScreen('unbind')
+    } else if (stepName === 'Version') {
+      setWizardScreen('version')
     }
   }
 
@@ -756,6 +810,20 @@ export default function Flash() {
       <div className="relative h-full">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <LinuxUnbind onNext={handleUnbindDone} />
+      </div>
+    )
+  }
+
+  // Render version selection
+  if (wizardScreen === 'version' && !error) {
+    return (
+      <div className="relative h-full">
+        <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
+        <VersionSelect
+          selectedVersion={selectedVersion}
+          onSelect={setSelectedVersion}
+          onNext={handleVersionNext}
+        />
       </div>
     )
   }

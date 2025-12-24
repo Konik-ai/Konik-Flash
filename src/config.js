@@ -1,9 +1,24 @@
 const config = {
-  manifests: {
-    release_mici: 'https://raw.githubusercontent.com/commaai/openpilot/ccf7361798a2b7ff36f5065dffb602eb40c22302/system/hardware/tici/all-partitions.json',
-    release_tizi: 'https://raw.githubusercontent.com/commaai/openpilot/927548621be1be0c2c9063868b93d1f5020904de/system/hardware/tici/all-partitions.json',
-    release_tici: 'https://raw.githubusercontent.com/commaai/openpilot/927548621be1be0c2c9063868b93d1f5020904de/system/hardware/tici/all-partitions.json',
-  },
+  versions: [
+    {
+      id: 'agnos-13.1',
+      name: 'AGNOS 13.1',
+      manifest: 'https://storage.konik.ai/agnosupdate/13.1/all-partitions.json',
+      isLatest: true,
+    },
+    {
+      id: 'agnos-12.4',
+      name: 'AGNOS 12.4',
+      manifest: 'https://storage.konik.ai/agnosupdate/12.4/all-partitions.json',
+      isLatest: false,
+    },
+    {
+      id: 'agnos-11.13',
+      name: 'AGNOS 11.13',
+      manifest: 'https://storage.konik.ai/agnosupdate/11.13/all-partitions.json',
+      isLatest: false,
+    },
+  ],
   loader: {
     url: 'https://raw.githubusercontent.com/commaai/flash/master/src/QDL/programmer.bin',
   },

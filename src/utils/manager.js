@@ -2,7 +2,6 @@ import { qdlDevice } from '@commaai/qdl'
 import { usbClass } from '@commaai/qdl/usblib'
 
 import { getManifest } from './manifest'
-import config from '../config'
 import { createSteps, withProgress } from './progress'
 
 // Fast mode for development - skips flashing system partition (the slowest)
@@ -48,36 +47,21 @@ export const ErrorCode = {
  * @returns {string|null}
  */
 export function checkCompatibleDevice(storageInfo) {
-  // Should be the same for all comma 3/3X
   if (storageInfo.block_size !== 4096 || storageInfo.page_size !== 4096 ||
     storageInfo.num_physical !== 6 || storageInfo.mem_type !== 'UFS') {
     throw new Error('UFS chip parameters mismatch')
   }
 
-  // comma three
-  // userdata start 6159400 size 7986131
-  if (storageInfo.prod_name === 'H28S7Q302BMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
-  }
-  if (storageInfo.prod_name === 'H28U74301AMR' && storageInfo.manufacturer_id === 429 &&
-    storageInfo.total_blocks === 14145536) {
-    return 'userdata_30'
-  }
-  if (/64GB-UFS-MT( +)8QSP/.test(storageInfo.prod_name) && storageInfo.manufacturer_id === 300 &&
-    storageInfo.total_blocks === 14143488) {
+  // 64GB devices (Konik A1/A1M) - approximately 14M blocks
+  if (storageInfo.total_blocks <= 16777216) {
     return 'userdata_30'
   }
 
-  // comma 3X
-  // userdata start 6159400 size 23446483
-  if (storageInfo.prod_name === 'SDINDDH4-128G   1308' && storageInfo.manufacturer_id === 325 &&
-    storageInfo.total_blocks === 29605888) {
+  // 128GB devices (larger variants) - approximately 29M blocks
+  if (storageInfo.total_blocks === 29605888) {
     return 'userdata_89'
   }
-  // unknown userdata sectors
-  if (storageInfo.prod_name === 'SDINDDH4-128G   1272' && storageInfo.manufacturer_id === 325 &&
-    storageInfo.total_blocks === 29775872) {
+  if (storageInfo.total_blocks === 29775872) {
     return 'userdata_90'
   }
 
@@ -110,8 +94,8 @@ export class FlashManager {
    * @param {ArrayBuffer} programmer
    * @param {FlashManagerCallbacks} callbacks
    */
-  constructor(programmer, callbacks = {}) {
-    this.manifestUrl = null
+  constructor(manifestUrl, programmer, callbacks = {}) {
+    this.manifestUrl = manifestUrl
     this.callbacks = callbacks
     this.device = new qdlDevice(programmer)
     /** @type {import('./image').ImageManager|null} */
@@ -205,6 +189,21 @@ export class FlashManager {
       return
     }
 
+    if (!this.manifest?.length) {
+      try {
+        this.manifest = await getManifest(this.manifestUrl)
+        if (this.manifest.length === 0) {
+          throw new Error('Manifest is empty')
+        }
+      } catch (err) {
+        console.error('[Flash] Failed to fetch manifest')
+        console.error(err)
+        this.#setError(ErrorCode.UNKNOWN)
+        return
+      }
+      console.info('[Flash] Loaded manifest', this.manifest)
+    }
+
     this.#setStep(StepCode.READY)
   }
 
@@ -239,39 +238,6 @@ export class FlashManager {
 
     console.info('[Flash] Connected')
     this.#setConnected(true)
-
-    try {
-      const deviceType = await this.device.getDeviceType()
-      if (deviceType == 32) {
-        this.manifestUrl = config.manifests.release_tici
-      } else if (deviceType == 33) {
-        this.manifestUrl = config.manifests.release_tizi
-      } else if (deviceType == 34) {
-        this.manifestUrl = config.manifests.release_mici
-      } else {
-        throw new Error('Unknown device type', deviceType)
-      }
-
-      try {
-        this.manifest = await getManifest(this.manifestUrl)
-        if (this.manifest.length === 0) {
-          throw new Error('Manifest is empty')
-        }
-      } catch (err) {
-        console.error('[Flash] Failed to fetch manifest')
-        console.error(err)
-        this.#setConnected(false)
-        this.#setError(ErrorCode.UNKNOWN)
-        return
-      }
-      console.info('[Flash] Loaded manifest', this.manifest)
-
-    } catch (err) {
-      console.error('[Flash] Connection lost', err)
-      this.#setError(ErrorCode.LOST_CONNECTION)
-      this.#setConnected(false)
-      return
-    }
 
     let storageInfo
     try {

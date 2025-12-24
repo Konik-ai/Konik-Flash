@@ -33,9 +33,9 @@ beforeAll(async () => {
   await imageManager.init()
 })
 
-for (const [branch, manifestUrl] of Object.entries(config.manifests)) {
-  describe.skipIf(MANIFEST_BRANCH && branch !== MANIFEST_BRANCH)(`${branch} manifest`, async () => {
-    const images = await getManifest(manifestUrl)
+for (const version of config.versions) {
+  describe.skipIf(MANIFEST_BRANCH && version.id !== MANIFEST_BRANCH)(`${version.id} manifest`, async () => {
+    const images = await getManifest(version.manifest)
 
     // Check all images are present
     expect(images.length).toBe(33)
