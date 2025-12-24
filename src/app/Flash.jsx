@@ -548,7 +548,7 @@ function DevicePicker({ onSelect }) {
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-8 p-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">Which device are you flashing?</h2>
-        <p className="text-xl text-gray-600">Select your comma device</p>
+        <p className="text-xl text-gray-600">Select your Konik device</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6">
