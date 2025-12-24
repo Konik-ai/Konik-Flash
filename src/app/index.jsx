@@ -16,33 +16,33 @@ function GitHubIcon({ className }) {
   )
 }
 
-function CommaIcon({ className }) {
+function KonikIcon({ className }) {
   return (
-    <svg className={className} viewBox="2 3 42 42" fill="currentColor">
-      <path fillRule="evenodd" clipRule="evenodd" d="M16.6964 40C16.6964 39.2596 16.6385 38.6393 16.7236 38.0415C16.7599 37.7865 17.0575 37.5135 17.3001 37.3595C18.4832 36.6087 19.7684 36.0092 20.8699 35.1481C24.4378 32.3587 26.5526 28.6866 26.6682 23.9166C26.7009 22.5622 26.203 22.2238 25.0654 22.7514C21.7817 24.2746 18.2505 23.3815 16.3659 20.5509C14.3107 17.4636 14.6001 13.3531 17.0626 10.6562C20.2079 7.21156 25.3833 7.10849 28.9522 10.3982C31.09 12.3688 32.1058 14.9132 32.3591 17.8074C33.2084 27.5032 28.3453 35.495 19.4941 39.0057C18.6181 39.353 17.7198 39.6382 16.6964 40Z" />
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M11.98 1.15c-0.91 0.11-1.5 0.29-2.32 0.7-2.01 1.01-3.37 2.67-3.85 4.71-0.3 1.29-0.21 3.17 0.23 4.69 0.27 0.93 0.52 1.51 0.96 2.18 0.33 0.5 0.51 0.69 0.65 0.67 0.19-0.02 0.14-0.31-0.19-1.03-1.11-2.48-1.3-4.46-0.64-6.63 0.62-2.03 2.06-3.35 4.28-3.92 0.7-0.18 0.83-0.21 1.73-0.31 0.79-0.09 0.84-0.1 0.95-0.22 0.09-0.11 0.11-0.16 0.09-0.43-0.03-0.45-0.08-0.48-0.83-0.47-0.32 0-0.8 0.03-1.06 0.06zM12.75 3.19c-1.21 0.16-1.89 0.36-2.74 0.77-1.7 0.83-2.67 2.42-2.88 4.75-0.07 0.82 0.06 1.87 0.37 2.86 0.17 0.54 0.28 0.8 0.76 1.94 0.4 0.95 0.65 1.79 0.65 2.23 0 0.36-0.11 0.76-0.31 1.13-0.19 0.35-0.35 0.55-1.13 1.37-0.31 0.33-0.61 0.69-0.66 0.8-0.15 0.31-0.2 0.81-0.18 1.67 0.02 0.86 0.05 0.97 0.29 1.11 0.14 0.08 0.32 0.09 5.1 0.1 5.37 0.01 5.31 0.01 5.5-0.24 0.09-0.13 0.1-0.19 0.1-1.17 0-1.37-0.01-1.42-0.63-2.07-1.25-1.31-1.35-1.59-1.06-2.8 0.39-1.58-0.05-3.07-1.27-4.35-0.21-0.22-0.67-0.64-1.04-0.95-0.79-0.66-1.04-0.91-1.29-1.28-0.15-0.22-0.18-0.31-0.17-0.47 0.02-0.29 0.1-0.31 1.09-0.29 1.21 0.03 1.95 0.23 3.08 0.81 0.44 0.23 0.51 0.25 0.61 0.2 0.11-0.05 1.13-1.53 1.27-1.85 0.11-0.24 0.01-0.34-2.19-2.39-0.39-0.36-0.98-0.91-1.31-1.23-0.34-0.31-0.68-0.61-0.78-0.67-0.2-0.12-0.32-0.12-1.17-0.01z"/>
     </svg>
   )
 }
 
 export default function App() {
   const version = import.meta.env.VITE_PUBLIC_GIT_SHA || 'dev'
-  console.info(`flash.comma.ai version: ${version}`)
+  console.info(`flash.konik.ai version: ${version}`)
   return (
-    <div className="h-screen w-screen bg-gray-100">
+    <div className="h-screen w-screen bg-slate-100">
       <Flash />
       <div className="absolute top-4 right-4 flex items-center gap-6">
-        <a href="https://comma.ai" target="_blank" rel="noopener noreferrer" title="comma.ai" className="text-gray-400 hover:text-[#51ff00] transition-colors">
-          <CommaIcon className="w-12 h-12" />
+        <a href="https://konik.ai" target="_blank" rel="noopener noreferrer" title="Konik.Ai" className="text-gray-400 hover:text-slate-900 transition-colors">
+          <KonikIcon className="w-12 h-12" />
         </a>
-        <a href="https://discord.comma.ai" target="_blank" rel="noopener noreferrer" title="Discord" className="text-gray-400 hover:text-[#51ff00] transition-colors">
+        <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" title="Discord" className="text-gray-400 hover:text-slate-900 transition-colors">
           <DiscordIcon className="w-12 h-12" />
         </a>
-        <a href="https://github.com/commaai/flash" target="_blank" rel="noopener noreferrer" title="GitHub" className="text-gray-400 hover:text-[#51ff00] transition-colors">
+        <a href="https://github.com/konik-ai/flash" target="_blank" rel="noopener noreferrer" title="GitHub" className="text-gray-400 hover:text-slate-900 transition-colors">
           <GitHubIcon className="w-12 h-12" />
         </a>
       </div>
       <div className="absolute bottom-4 left-4 text-sm text-gray-500">
-        <a href={`https://github.com/commaai/flash/tree/${version}`} target="_blank" className="hover:underline">
+        <a href={`https://github.com/konik-ai/flash/tree/${version}`} target="_blank" className="hover:underline">
           {version}
         </a>
       </div>

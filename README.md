@@ -1,8 +1,8 @@
 # flash
 
-► [flash.comma.ai](https://flash.comma.ai)
+â–º [flash.konik.ai](https://flash.konik.ai)
 
-This tool allows you to flash AGNOS onto your comma device. Uses [qdl.js](https://github.com/commaai/qdl.js).
+This tool allows you to flash AGNOS onto your Konik device. Uses [qdl.js](https://github.com/commaai/qdl.js).
 
 ## Development
 

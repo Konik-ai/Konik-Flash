@@ -117,13 +117,13 @@ ${consoleLogs.slice(-30).map(l => `[${l.time}] [${l.level}] ${l.message}`).join(
   }
 
   return (
-    <div className="mt-6 w-full max-w-xl mx-4 p-4 bg-gray-100 rounded-lg text-left text-sm overflow-hidden">
+    <div className="mt-6 w-full max-w-xl mx-4 p-4 bg-slate-100 rounded-lg text-left text-sm overflow-hidden">
       <div className="flex justify-between items-start mb-3 gap-2">
         <p className="text-gray-600 text-sm">
           Copy this debug info and paste it in{' '}
-          <a href="https://discord.comma.ai" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Discord</a>
+          <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Discord</a>
           {' '}or{' '}
-          <a href="https://github.com/commaai/flash/issues/new" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GitHub Issues</a>.
+          <a href="https://github.com/Konik-ai/flash/issues/new" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GitHub Issues</a>.
         </p>
         {onClose && (
           <button
@@ -142,7 +142,7 @@ ${consoleLogs.slice(-30).map(l => `[${l.time}] [${l.level}] ${l.message}`).join(
       </pre>
       <button
         onClick={handleCopy}
-        className="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded transition-colors"
+        className="mt-3 px-4 py-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-white text-sm rounded transition-colors"
       >
         {copied ? 'Copied!' : 'Copy Debug Info'}
       </button>
@@ -313,17 +313,17 @@ function Stepper({ steps, currentStep, onStepClick }) {
         return (
           <div key={stepName} className="flex items-center">
             {index > 0 && (
-              <div className={`w-8 h-0.5 mx-1 ${isCompleted ? 'bg-[#51ff00]' : 'bg-gray-300'}`} />
+              <div className={`w-8 h-0.5 mx-1 ${isCompleted ? 'bg-slate-800' : 'bg-slate-300'}`} />
             )}
             <button
               onClick={() => isClickable && onStepClick(index)}
               disabled={!isClickable}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                 isCurrent
-                  ? 'bg-[#51ff00] text-black'
+                  ? 'bg-slate-900 text-white'
                   : isCompleted
-                    ? 'bg-[#51ff00]/80 text-black hover:bg-[#51ff00] cursor-pointer'
-                    : 'bg-gray-200 text-gray-500 cursor-default'
+                    ? 'bg-slate-800/80 text-white hover:bg-slate-800 cursor-pointer'
+                    : 'bg-slate-200 text-slate-500 cursor-default'
               }`}
             >
               {isCompleted && (
@@ -346,14 +346,14 @@ function LandingPage({ onStart }) {
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-8 p-8">
       <img src={comma} alt="comma" width={80} height={80} />
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">flash.comma.ai</h1>
+        <h1 className="text-4xl font-bold mb-4">flash.konik.ai</h1>
         <p className="text-xl text-gray-600 max-w-md">
-          Restore your comma device to a fresh factory state
+          Restore your Konik device to a fresh factory state
         </p>
       </div>
       <button
         onClick={onStart}
-        className="px-12 py-4 text-2xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+        className="px-12 py-4 text-2xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
       >
         Start
       </button>
@@ -375,14 +375,14 @@ function WindowsZadig({ deviceType, onNext }) {
 
       <div className="max-w-2xl space-y-6 text-lg">
         <div className="flex gap-4">
-          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-base">1</span>
+          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-base">1</span>
           <div >
             <p>Download and run <a href="https://zadig.akeo.ie/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">Zadig</a></p>
           </div>
         </div>
 
         <div className="flex gap-4">
-          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-base">2</span>
+          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-base">2</span>
           <div >
             <p className="mb-2">Under <code className="bg-gray-200 px-1 rounded">Device</code> in the menu bar, select <code className="bg-gray-200 px-1 rounded">Create New Device</code></p>
             <img src={zadigCreateNewDevice} alt="Zadig Create New Device" className="rounded-lg border border-gray-300" width={460} />
@@ -390,11 +390,11 @@ function WindowsZadig({ deviceType, onNext }) {
         </div>
 
         <div className="flex gap-4">
-          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-base">3</span>
+          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-base">3</span>
           <div >
             <p className="mb-2">Fill in the form:</p>
             <ul className="list-none space-y-1 ml-2 mb-2">
-              <li><span className="text-gray-500 mr-2">a.</span>Name: <code className="bg-gray-200 px-1 rounded">{deviceType === DeviceType.COMMA_4 ? 'comma four' : 'comma 3/3X'}</code></li>
+              <li><span className="text-gray-500 mr-2">a.</span>Name: <code className="bg-gray-200 px-1 rounded">{deviceType === DeviceType.COMMA_4 ? 'comma four' : 'Konik A1/A1M'}</code></li>
               <li><span className="text-gray-500 mr-2">b.</span>USB ID: <code className="bg-gray-200 px-1 rounded">{vendorId}</code> and <code className="bg-gray-200 px-1 rounded">{PRODUCT_ID}</code></li>
             </ul>
             <img src={zadigForm} alt="Zadig Form" className="rounded-lg border border-gray-300" width={460} />
@@ -402,7 +402,7 @@ function WindowsZadig({ deviceType, onNext }) {
         </div>
 
         <div className="flex gap-4">
-          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-base">4</span>
+          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-base">4</span>
           <div >
             <p>Click <code className="bg-gray-200 px-1 rounded">Install Driver</code></p>
           </div>
@@ -411,7 +411,7 @@ function WindowsZadig({ deviceType, onNext }) {
 
       <button
         onClick={onNext}
-        className="px-8 py-3 text-xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+        className="px-8 py-3 text-xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
       >
         Done
       </button>
@@ -433,27 +433,27 @@ function ConnectInstructions({ deviceType, onNext }) {
       <div className="flex flex-col md:flex-row gap-8 items-center">
         <img
           src={isCommaFour ? qdlPortsFour : qdlPortsThree}
-          alt={isCommaFour ? "comma four ports" : "comma three and 3X ports"}
+          alt={isCommaFour ? "comma four ports" : "Konik A1 and A1M ports"}
           className="h-48"
        />
 
         <ol className="text-left space-y-3 text-lg">
           <li className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-sm">A</span>
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm">A</span>
             <span>Unplug the device</span>
           </li>
           {!isCommaFour && (
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-sm">B</span>
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm">B</span>
               <span>Wait for the light on the back to fully turn off</span>
             </li>
           )}
           <li className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-sm">{isCommaFour ? 'B' : 'C'}</span>
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm">{isCommaFour ? 'B' : 'C'}</span>
             <span>Connect <strong>port 1</strong> to your computer</span>
           </li>
           <li className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#51ff00] text-black flex items-center justify-center font-bold text-sm">{isCommaFour ? 'C' : 'D'}</span>
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm">{isCommaFour ? 'C' : 'D'}</span>
             <span>Connect <strong>port 2</strong> to your computer or a power brick</span>
           </li>
         </ol>
@@ -465,7 +465,7 @@ function ConnectInstructions({ deviceType, onNext }) {
 
       <button
         onClick={onNext}
-        className="px-8 py-3 text-xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+        className="px-8 py-3 text-xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
       >
         Next
       </button>
@@ -501,7 +501,7 @@ function LinuxUnbind({ onNext }) {
         </pre>
         <button
           onClick={handleCopy}
-          className="absolute top-2 right-2 px-3 py-1 bg-blue-600 hover:bg-blue-500 active:bg-blue-400 text-white text-sm rounded transition-colors"
+          className="absolute top-2 right-2 px-3 py-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-white text-sm rounded transition-colors"
         >
           {copied ? 'Copied!' : 'Copy'}
         </button>
@@ -509,7 +509,7 @@ function LinuxUnbind({ onNext }) {
 
       <button
         onClick={onNext}
-        className="px-8 py-3 text-xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+        className="px-8 py-3 text-xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
       >
         Done
       </button>
@@ -527,12 +527,12 @@ function WebUSBConnect({ onConnect }) {
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">Select your device</h2>
         <p className="text-xl text-gray-600 max-w-lg">
-          Click the button below to open the device selector, then choose <code className="px-2 py-0.5 bg-[#51ff00] rounded font-mono text-black font-semibold">QUSB_BULK_CID</code> from the list.
+          Click the button below to open the device selector, then choose <code className="px-2 py-0.5 bg-slate-900 rounded font-mono text-white font-semibold">QUSB_BULK_CID</code> from the list.
         </p>
       </div>
       <button
         onClick={onConnect}
-        className="px-8 py-3 text-xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+        className="px-8 py-3 text-xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
       >
         Connect
       </button>
@@ -556,24 +556,12 @@ function DevicePicker({ onSelect }) {
           onClick={() => setSelected(DeviceType.COMMA_3)}
           className={`flex flex-col items-center gap-4 px-8 py-6 rounded-xl border-2 transition-colors ${
             selected === DeviceType.COMMA_3
-              ? 'border-[#51ff00] bg-[#51ff00]/10'
-              : 'border-gray-300 hover:border-gray-400'
+              ? 'border-slate-900 bg-slate-900/10'
+              : 'border-slate-300 hover:border-slate-400'
           }`}
         >
-          <img src={comma3XProduct} alt="comma three or comma 3X" className="h-32 object-contain" />
-          <span className="text-xl font-semibold">comma three<br/>comma 3X</span>
-        </button>
-
-        <button
-          onClick={() => setSelected(DeviceType.COMMA_4)}
-          className={`flex flex-col items-center gap-4 px-8 py-6 rounded-xl border-2 transition-colors ${
-            selected === DeviceType.COMMA_4
-              ? 'border-[#51ff00] bg-[#51ff00]/10'
-              : 'border-gray-300 hover:border-gray-400'
-          }`}
-        >
-          <img src={comma4Product} alt="comma four" className="h-32 object-contain" />
-          <span className="text-xl font-semibold">comma four</span>
+          <img src={comma3XProduct} alt="Konik A1 or Konik A1M" className="h-32 object-contain" />
+          <span className="text-xl font-semibold">Konik A1<br/>Konik A1M</span>
         </button>
       </div>
 
@@ -582,8 +570,8 @@ function DevicePicker({ onSelect }) {
         disabled={!selected}
         className={`px-8 py-3 text-xl font-semibold rounded-full transition-colors ${
           selected
-            ? 'bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? 'bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white'
+            : 'bg-slate-200 text-slate-500 cursor-not-allowed'
         }`}
       >
         Next
@@ -794,9 +782,9 @@ export default function Flash() {
   }
 
   // Build Discord help link based on device type
-  const discordChannel = selectedDevice === DeviceType.COMMA_4 ? 'hw-four' : 'hw-three-3x'
+  const discordChannel = selectedDevice === DeviceType.COMMA_4 ? 'konik-a1' : 'konik-a1'
   const discordLink = showDiscordHelp && (
-    <> If the problem persists, join <a href="https://discord.comma.ai" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">#{discordChannel}</a> on Discord for help.</>
+    <> If the problem persists, join <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">#{discordChannel}</a> on Discord for help.</>
   )
 
 
@@ -857,7 +845,7 @@ export default function Flash() {
       </span>
       {error !== ErrorCode.NONE && !hideRetry && (
         <button
-          className="px-8 py-3 text-xl font-semibold rounded-full bg-[#51ff00] hover:bg-[#45e000] active:bg-[#3acc00] text-black transition-colors"
+          className="px-8 py-3 text-xl font-semibold rounded-full bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white transition-colors"
           onClick={handleRetry}
         >
           Retry
