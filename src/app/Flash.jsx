@@ -17,14 +17,16 @@ import qdlPortsThree from '../assets/qdl-ports-three.svg'
 import qdlPortsFour from '../assets/qdl-ports-four.svg'
 import zadigCreateNewDevice from '../assets/zadig_create_new_device.png'
 import zadigForm from '../assets/zadig_form.png'
+import konikA1Product from '../assets/konikA1.webp'
 import comma3XProduct from '../assets/comma3X.webp'
+import commaCloneProduct from '../assets/commaClone.webp'
 import comma4Product from '../assets/four_screen_on.webp'
 
 // All images that need to be preloaded
 const preloadImages = [
   comma, bolt, cable, deviceExclamation, deviceQuestion, done, exclamation,
   systemUpdate, qdlPortsThree, qdlPortsFour, zadigCreateNewDevice, zadigForm,
-  comma3XProduct, comma4Product
+  konikA1Product, comma3XProduct, commaCloneProduct, comma4Product
 ]
 
 // Hidden preload component - renders all images offscreen so they're decoded and ready
@@ -348,7 +350,7 @@ function LandingPage({ onStart }) {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">flash.konik.ai</h1>
         <p className="text-xl text-gray-600 max-w-md">
-          Restore your Konik device to a fresh factory state
+          Restore your device to a fresh factory state
         </p>
       </div>
       <button
@@ -587,33 +589,64 @@ function WebUSBConnect({ onConnect }) {
 // Device picker component
 function DevicePicker({ onSelect }) {
   const [selected, setSelected] = useState(null)
+  const deviceOptions = [
+    {
+      id: 'konik-a1',
+      deviceType: DeviceType.COMMA_3,
+      image: konikA1Product,
+      alt: 'Konik A1 or Konik A1M',
+      label: (
+        <>
+          Konik A1<br />Konik A1M
+        </>
+      ),
+    },
+    {
+      id: 'comma-3x',
+      deviceType: DeviceType.COMMA_3,
+      image: comma3XProduct,
+      alt: 'comma 3x',
+      label: 'comma 3x',
+    },
+    {
+      id: 'comma-clone',
+      deviceType: DeviceType.COMMA_3,
+      image: commaCloneProduct,
+      alt: 'comma 3X clone',
+      label: 'comma 3X clone',
+    },
+  ]
+  const selectedOption = deviceOptions.find((option) => option.id === selected)
 
   return (
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-8 p-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">Which device are you flashing?</h2>
-        <p className="text-xl text-gray-600">Select your Konik device</p>
+        <p className="text-xl text-gray-600">Select your device</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6">
-        <button
-          onClick={() => setSelected(DeviceType.COMMA_3)}
-          className={`flex flex-col items-center gap-4 px-8 py-6 rounded-xl border-2 transition-colors ${
-            selected === DeviceType.COMMA_3
-              ? 'border-slate-900 bg-slate-900/10'
-              : 'border-slate-300 hover:border-slate-400'
-          }`}
-        >
-          <img src={comma3XProduct} alt="Konik A1 or Konik A1M" className="h-32 object-contain" />
-          <span className="text-xl font-semibold">Konik A1<br/>Konik A1M</span>
-        </button>
+        {deviceOptions.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => setSelected(option.id)}
+            className={`flex flex-col items-center gap-4 px-8 py-6 rounded-xl border-2 transition-colors ${
+              selected === option.id
+                ? 'border-slate-900 bg-slate-900/10'
+                : 'border-slate-300 hover:border-slate-400'
+            }`}
+          >
+            <img src={option.image} alt={option.alt} className="h-32 object-contain" />
+            <span className="text-xl font-semibold">{option.label}</span>
+          </button>
+        ))}
       </div>
 
       <button
-        onClick={() => selected && onSelect(selected)}
-        disabled={!selected}
+        onClick={() => selectedOption && onSelect(selectedOption.deviceType)}
+        disabled={!selectedOption}
         className={`px-8 py-3 text-xl font-semibold rounded-full transition-colors ${
-          selected
+          selectedOption
             ? 'bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-white'
             : 'bg-slate-200 text-slate-500 cursor-not-allowed'
         }`}
