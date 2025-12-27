@@ -850,9 +850,8 @@ export default function Flash() {
   }
 
   // Build Discord help link based on device type
-  const discordChannel = selectedDevice === DeviceType.COMMA_4 ? 'konik-a1' : 'konik-a1'
   const discordLink = showDiscordHelp && (
-    <> If the problem persists, join <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">#{discordChannel}</a> on Discord for help.</>
+    <> If the problem persists, join <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold"></a> for help.</>
   )
 
 
