@@ -4,6 +4,19 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/agnosupdate': {
+        target: 'https://storage.konik.ai',
+        changeOrigin: true,
+      },
+      '/qdl': {
+        target: 'https://raw.githubusercontent.com/commaai/flash/master/src/QDL',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/qdl/, ''),
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
