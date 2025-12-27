@@ -14,6 +14,7 @@ import done from '../assets/done.svg'
 import exclamation from '../assets/exclamation.svg'
 import systemUpdate from '../assets/system_update_c3.svg'
 import qdlPortsThree from '../assets/qdl-ports-three.svg'
+import qdlPortsKonik from '../assets/qdl-ports-konik.svg'
 import qdlPortsFour from '../assets/qdl-ports-four.svg'
 import zadigCreateNewDevice from '../assets/zadig_create_new_device.png'
 import zadigForm from '../assets/zadig_form.png'
@@ -396,7 +397,7 @@ function WindowsZadig({ deviceType, onNext }) {
           <div >
             <p className="mb-2">Fill in the form:</p>
             <ul className="list-none space-y-1 ml-2 mb-2">
-              <li><span className="text-gray-500 mr-2">a.</span>Name: <code className="bg-gray-200 px-1 rounded">{deviceType === DeviceType.COMMA_4 ? 'comma four' : 'Konik A1/A1M'}</code></li>
+              <li><span className="text-gray-500 mr-2">a.</span>Name: <code className="bg-gray-200 px-1 rounded">{deviceType === DeviceType.COMMA_4 ? 'comma four' : 'Konik Flash Device'}</code></li>
               <li><span className="text-gray-500 mr-2">b.</span>USB ID: <code className="bg-gray-200 px-1 rounded">{vendorId}</code> and <code className="bg-gray-200 px-1 rounded">{PRODUCT_ID}</code></li>
             </ul>
             <img src={zadigForm} alt="Zadig Form" className="rounded-lg border border-gray-300" width={460} />
@@ -422,8 +423,11 @@ function WindowsZadig({ deviceType, onNext }) {
 }
 
 // Connect instructions component - shows how to physically connect the device
-function ConnectInstructions({ deviceType, onNext }) {
+function ConnectInstructions({ deviceType, selectedDeviceId, onNext }) {
   const isCommaFour = deviceType === DeviceType.COMMA_4
+  const showKonikPorts = !isCommaFour && selectedDeviceId === 'konik-a1'
+  const portsImage = isCommaFour ? qdlPortsFour : (showKonikPorts ? qdlPortsKonik : qdlPortsThree)
+  const portsAlt = isCommaFour ? 'comma four ports' : (showKonikPorts ? 'Konik A1 and A1M ports' : 'comma 3 and 3X ports')
 
   return (
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-6 p-8">
@@ -434,8 +438,8 @@ function ConnectInstructions({ deviceType, onNext }) {
 
       <div className="flex flex-col md:flex-row gap-8 items-center">
         <img
-          src={isCommaFour ? qdlPortsFour : qdlPortsThree}
-          alt={isCommaFour ? "comma four ports" : "Konik A1 and A1M ports"}
+          src={portsImage}
+          alt={portsAlt}
           className="h-48"
        />
 
@@ -643,7 +647,7 @@ function DevicePicker({ onSelect }) {
       </div>
 
       <button
-        onClick={() => selectedOption && onSelect(selectedOption.deviceType)}
+        onClick={() => selectedOption && onSelect(selectedOption)}
         disabled={!selectedOption}
         className={`px-8 py-3 text-xl font-semibold rounded-full transition-colors ${
           selectedOption
@@ -688,6 +692,7 @@ export default function Flash() {
   const [connected, setConnected] = useState(false)
   const [serial, setSerial] = useState(null)
   const [selectedDevice, setSelectedDevice] = useState(null)
+  const [selectedDeviceId, setSelectedDeviceId] = useState(null)
   const [selectedVersion, setSelectedVersion] = useState(() => config.versions.find((version) => version.isLatest) || config.versions[0])
   const [wizardScreen, setWizardScreen] = useState('landing') // 'landing', 'device', 'zadig', 'connect', 'unbind', 'version', 'webusb', 'flash'
 
@@ -737,8 +742,9 @@ export default function Flash() {
   }
 
   // Handle device selection
-  const handleDeviceSelect = (deviceType) => {
-    setSelectedDevice(deviceType)
+  const handleDeviceSelect = (device) => {
+    setSelectedDevice(device.deviceType)
+    setSelectedDeviceId(device.id)
     if (isWindows) {
       setWizardScreen('zadig')
     } else {
@@ -783,6 +789,7 @@ export default function Flash() {
       setStep(StepCode.DEVICE_PICKER)
       setWizardScreen('device')
       setSelectedDevice(null)
+      setSelectedDeviceId(null)
     } else if (stepName === 'Driver') {
       setWizardScreen('zadig')
     } else if (stepName === 'Connect') {
@@ -832,7 +839,7 @@ export default function Flash() {
     return (
       <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
-        <ConnectInstructions deviceType={selectedDevice} onNext={handleConnectNext} />
+        <ConnectInstructions deviceType={selectedDevice} selectedDeviceId={selectedDeviceId} onNext={handleConnectNext} />
       </div>
     )
   }
