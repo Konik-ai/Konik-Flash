@@ -777,7 +777,7 @@ export default function Flash() {
   // Render device picker
   if (wizardScreen === 'device' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <DevicePicker onSelect={handleDeviceSelect} />
       </div>
@@ -787,7 +787,7 @@ export default function Flash() {
   // Render Windows Zadig driver setup
   if (wizardScreen === 'zadig' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <WindowsZadig deviceType={selectedDevice} onNext={handleZadigDone} />
       </div>
@@ -797,7 +797,7 @@ export default function Flash() {
   // Render connect instructions
   if (wizardScreen === 'connect' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <ConnectInstructions deviceType={selectedDevice} onNext={handleConnectNext} />
       </div>
@@ -807,7 +807,7 @@ export default function Flash() {
   // Render linux unbind
   if (wizardScreen === 'unbind' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <LinuxUnbind onNext={handleUnbindDone} />
       </div>
@@ -817,7 +817,7 @@ export default function Flash() {
   // Render version selection
   if (wizardScreen === 'version' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <VersionSelect
           selectedVersion={selectedVersion}
@@ -831,7 +831,7 @@ export default function Flash() {
   // Render WebUSB connection screen
   if (wizardScreen === 'webusb' && !error) {
     return (
-      <div className="relative h-full">
+      <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
         <WebUSBConnect onConnect={handleWebUSBConnect} />
       </div>
@@ -850,9 +850,8 @@ export default function Flash() {
   }
 
   // Build Discord help link based on device type
-  const discordChannel = selectedDevice === DeviceType.COMMA_4 ? 'konik-a1' : 'konik-a1'
   const discordLink = showDiscordHelp && (
-    <> If the problem persists, join <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">#{discordChannel}</a> on Discord for help.</>
+    <> If the problem persists, join <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold"></a> for help.</>
   )
 
 
