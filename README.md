@@ -2,7 +2,7 @@
 
 👉 **https://flash.konik.ai**
 
-A web-based flashing tool for installing **ATEOS** on **Konik devices**, built on top of **[`qdl.js`](https://github.com/commaai/qdl.js)**.
+A web-based flashing tool for installing **AGNOS** on **Konik devices**, built on top of **[`qdl.js`](https://github.com/commaai/qdl.js)**.
 
 No native flashing tools required — everything runs directly in your browser.
 
@@ -11,7 +11,7 @@ No native flashing tools required — everything runs directly in your browser.
 ## ✨ Features
 
 - 🌐 **Browser-based flashing** (no installs required)
-- 🧠 **Version selector** to flash specific ATEOS releases
+- 🧠 **Version selector** to flash specific AGNOS releases
 - 📦 **Supports Konik A1 and A1M**
 - ⚡ **Fast testing mode** (skip system partition)
 - 🪟 **Windows-specific flow** with driver guidance
