@@ -37,14 +37,12 @@ export default function App() {
         <a href="https://discord.gg/vXG2eq5KSZ" target="_blank" rel="noopener noreferrer" title="Discord" className="text-gray-400 hover:text-slate-900 transition-colors">
           <DiscordIcon className="w-12 h-12" />
         </a>
-        <a href="https://github.com/konik-ai/flash" target="_blank" rel="noopener noreferrer" title="GitHub" className="text-gray-400 hover:text-slate-900 transition-colors">
+        <a href="https://github.com/Konik-ai/Konik-Flash" target="_blank" rel="noopener noreferrer" title="GitHub" className="text-gray-400 hover:text-slate-900 transition-colors">
           <GitHubIcon className="w-12 h-12" />
         </a>
       </div>
       <div className="absolute bottom-4 left-4 text-sm text-gray-500">
-        <a href={`https://github.com/konik-ai/flash/tree/${version}`} target="_blank" className="hover:underline">
-          {version}
-        </a>
+        Built by <a href="https://konik.ai" target="_blank" rel="noopener noreferrer" className="hover:underline">Konik.ai</a>
       </div>
     </div>
   )

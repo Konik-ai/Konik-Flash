@@ -349,7 +349,7 @@ function LandingPage({ onStart }) {
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-8 p-8">
       <img src={comma} alt="comma" width={80} height={80} />
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">flash.konik.ai</h1>
+        <h1 className="text-4xl font-bold mb-4">Konik Flash</h1>
         <p className="text-xl text-gray-600 max-w-md">
           Restore your device to a fresh factory state
         </p>
@@ -480,7 +480,7 @@ function ConnectInstructions({ deviceType, selectedDeviceId, onNext }) {
 }
 
 // Version selection component
-function VersionSelect({ selectedVersion, onSelect, onNext }) {
+function VersionSelect({ selectedVersion, onSelect, onNext, availableVersions }) {
   return (
     <div className="wizard-screen flex flex-col items-center justify-center h-full gap-6 p-8">
       <div className="text-center">
@@ -489,7 +489,7 @@ function VersionSelect({ selectedVersion, onSelect, onNext }) {
       </div>
 
       <div className="w-full max-w-xl space-y-3">
-        {config.versions.map((version) => (
+        {availableVersions.map((version) => (
           <button
             key={version.id}
             onClick={() => onSelect(version)}
@@ -613,11 +613,11 @@ function DevicePicker({ onSelect }) {
       label: 'comma 3x',
     },
     {
-      id: 'comma-clone',
+      id: 'comma-three',
       deviceType: DeviceType.COMMA_3,
       image: commaCloneProduct,
-      alt: 'comma 3X clone',
-      label: 'comma 3X clone',
+      alt: 'comma three',
+      label: 'comma three',
     },
   ]
   const selectedOption = deviceOptions.find((option) => option.id === selected)
@@ -693,7 +693,7 @@ export default function Flash() {
   const [serial, setSerial] = useState(null)
   const [selectedDevice, setSelectedDevice] = useState(null)
   const [selectedDeviceId, setSelectedDeviceId] = useState(null)
-  const [selectedVersion, setSelectedVersion] = useState(() => config.versions.find((version) => version.isLatest) || config.versions[0])
+  const [selectedVersion, setSelectedVersion] = useState(null)
   const [wizardScreen, setWizardScreen] = useState('landing') // 'landing', 'device', 'zadig', 'connect', 'unbind', 'version', 'webusb', 'flash'
 
   const qdlManager = useRef(null)
@@ -726,7 +726,7 @@ export default function Flash() {
         console.error('Error initializing Flash manager:', err)
         setError(ErrorCode.UNKNOWN)
       })
-  }, [selectedVersion?.manifest, imageManager.current])
+  }, [selectedVersion?.manifest, selectedDeviceId, imageManager.current])
 
   // Transition to flash screen when connected
   useEffect(() => {
@@ -745,6 +745,13 @@ export default function Flash() {
   const handleDeviceSelect = (device) => {
     setSelectedDevice(device.deviceType)
     setSelectedDeviceId(device.id)
+
+    // Auto-select the appropriate version for this device
+    const availableVersion = config.versions.find(v => v.devices.includes(device.id))
+    if (availableVersion) {
+      setSelectedVersion(availableVersion)
+    }
+
     if (isWindows) {
       setWizardScreen('zadig')
     } else {
@@ -856,6 +863,9 @@ export default function Flash() {
 
   // Render version selection
   if (wizardScreen === 'version' && !error) {
+    // Filter versions based on selected device
+    const availableVersions = config.versions.filter(v => v.devices.includes(selectedDeviceId))
+
     return (
       <div className="relative h-full pt-16">
         <Stepper steps={wizardSteps} currentStep={wizardStep} onStepClick={handleWizardBack} />
@@ -863,6 +873,7 @@ export default function Flash() {
           selectedVersion={selectedVersion}
           onSelect={setSelectedVersion}
           onNext={handleVersionNext}
+          availableVersions={availableVersions}
         />
       </div>
     )
