@@ -3,7 +3,7 @@ const config = {
     {
       id: 'agnos-16',
       name: 'AGNOS 16',
-      manifest: 'https://storage.konik.ai/agnosupdate/16-cc/all-partitions.json',
+      manifest: 'https://storage.konik.ai/agnosupdate/16/all-partitions.json',
       isLatest: true,
     },
     {
